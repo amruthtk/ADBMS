@@ -1,0 +1,105 @@
+Savepoint Rollback -
+mysql> select * from Student;
++------+------+------+
+| roll | name | age  |
++------+------+------+
+|   23 | ajay |   22 |
++------+------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into Student values(01,'ajay',20);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into Student values(06,'amruth',24);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from Student;
++------+--------+------+
+| roll | name   | age  |
++------+--------+------+
+|    1 | ajay   |   20 |
+|    6 | amruth |   24 |
+|   23 | ajay   |   22 |
++------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> rollback to s1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from Student;
++------+------+------+
+| roll | name | age  |
++------+------+------+
+|    1 | ajay |   20 |
+|   23 | ajay |   22 |
++------+------+------+
+2 rows in set (0.00 sec)
+
+Roll back -
+mysql> set autocommit = off;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from Student;
++------+--------+------+
+| roll | name   | age  |
++------+--------+------+
+|   10 | amruth |   20 |
+|   23 | ajay   |   22 |
++------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> delete from Student where roll = 10 ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from Student;
++------+------+------+
+| roll | name | age  |
++------+------+------+
+|   23 | ajay |   22 |
++------+------+------+
+1 row in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from Student;
++------+--------+------+
+| roll | name   | age  |
++------+--------+------+
+|   10 | amruth |   20 |
+|   23 | ajay   |   22 |
++------+--------+------+
+2 rows in set (0.00 sec)
+
+Commit -
+
+mysql> select * from Student;
++------+--------+------+
+| roll | name   | age  |
++------+--------+------+
+|   10 | amruth |   20 |
+|   23 | ajay   |   22 |
++------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> insert into Student values(01,'ajay',20);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from Student;
++------+--------+------+
+| roll | name   | age  |
++------+--------+------+
+|    1 | ajay   |   20 |
+|   10 | amruth |   20 |
+|   23 | ajay   |   22 |
++------+--------+------+
+3 rows in set (0.00 sec)
