@@ -1,0 +1,35 @@
+create user;
+mysql> CREATE USER amruth@'localhost' IDENTIFIED BY 'Root@123';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE USER ajay@'localhost' IDENTIFIED BY 'Ajay@123';
+Query OK, 0 rows affected (0.00 sec)
+
+GRANT;
+mysql> grant insert , select on Customer to amruth@'localhost';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> grant update , delete on Customer to ajay@'localhost';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show grants for amruth@'localhost';
++----------------------------------------------------------------------+
+| Grants for amruth@localhost                                          |
++----------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `amruth`@`localhost`                           |
+| GRANT SELECT, INSERT ON `invoice`.`Customer` TO `amruth`@`localhost` |
++----------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+REVOKE;
+mysql> revoke delete on *.* from ajay@'localhost';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> show grants for ajay@'localhost';
++-------------------------------------------+
+| Grants for ajay@localhost                 |
++-------------------------------------------+
+| GRANT UPDATE ON *.* TO `ajay`@`localhost` |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
