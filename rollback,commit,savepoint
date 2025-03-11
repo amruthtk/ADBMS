@@ -103,3 +103,4 @@ mysql> select * from Student;
 |   23 | ajay   |   22 |
 +------+--------+------+
 3 rows in set (0.00 sec)
+//verified
