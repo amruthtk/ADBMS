@@ -1,0 +1,129 @@
+a) ACCESSING DATABASE:  (SELECT, Filtering using WHERE, ORDER BY Clauses)
+
+mysql> select*from Customer;
++------+------+---------+------------+------------+
+| id   | name | address | city       | ph_no      |
++------+------+---------+------------+------------+
+| 1001 | arun | palayam | trivandrum | 9999555343 |
+| 1002 | arun | calicut | mukkam     |       NULL |
+| 1003 | akil | palazhi | calicut    |  987654321 |
++------+------+---------+------------+------------+
+3 rows in set (0.01 sec)
+
+mysql> select*from Invoice_item;
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|    101 |    1 |        5 |
+|    101 |    2 |        5 |
+|    102 |    3 |        5 |
+|    103 |    1 |        2 |
++--------+------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select*from Invoice_master;
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    101 |    1001 | 2023-02-25 |
+|    102 |    1002 | 2024-03-15 |
+|    103 |    1003 | 2024-01-22 |
++--------+---------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select*from Product;
++-----+--------+-------+
+| pid | pname  | price |
++-----+--------+-------+
+|   1 | pen    |    51 |
+|   2 | pencil |    89 |
+|   3 | soap   | 122.4 |
++-----+--------+-------+
+3 rows in set (0.00 sec)
+
+1.    List all invoice items, avoid duplicates.
+
+mysql> select distinct quantity from Invoice_item;
++----------+
+| quantity |
++----------+
+|        5 |
+|        2 |
++----------+
+2 rows in set (0.00 sec)
+
+2.    List the invoice details from 1st January 2024 to 20 FEB 2024
+
+mysql> select * from Invoice_master where inv_date>='2024-01-01' and inv_date<='2024-02-20';
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    103 |    1003 | 2024-01-22 |
++--------+---------+------------+
+
+3.    List the customer details who not live in ‘mukkam’.
+
+mysql> select * from Customer where city!='mukkam';
++------+------+---------+------------+------------+
+| id   | name | address | city       | ph_no      |
++------+------+---------+------------+------------+
+| 1001 | arun | palayam | trivandrum | 9999555343 |
+| 1003 | akil | palazhi | calicut    |  987654321 |
++------+------+---------+------------+------------+
+2 rows in set (0.00 sec)
+
+4.    List the customers who have no phone number.
+
+mysql> select *from Customer where ph_no is null;
+
++------+------+---------+--------+-------+
+| id   | name | address | city   | ph_no |
++------+------+---------+--------+-------+
+| 1002 | arun | calicut | mukkam |  NULL |
++------+------+---------+--------+-------+
+
+5.    Display customer names in descending order.
+
+mysql> select name from Customer order by name desc;
++------+
+| name |
++------+
+| arun |
+| arun |
+| akil |
++------+
+
+6.    Display the customer details sorted in ascending by city and descending by names.
+
+mysql> select * from Customer order by city asc,name desc;
+
+------+------+---------+------------+------------+
+| id   | name | address | city       | ph_no      |
++------+------+---------+------------+------------+
+| 1003 | akil | palazhi | calicut    |  987654321 |
+| 1002 | arun | calicut | mukkam     |       NULL |
+| 1001 | arun | palayam | trivandrum | 9999555343 |
++------+------+---------+------------+------------+
+
+7.    Find the customer names who have ‘e’ or ‘a’ in them and at least 3 characters in length
+
+mysql> select name from Customer where (name like'%a%'or name like'%e%') and name like'___%';
+
++------+
+| name |
++------+
+| arun |
+| arun |
+| akil |
++------+
+
+8.    List the names of customers their names have ‘k’ in second position.
+
+mysql> select name from Customer where name like'_k%';
++------+
+| name |
++------+
+| akil |
++------+
+
+
