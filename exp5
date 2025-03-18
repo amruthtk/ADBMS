@@ -1,0 +1,58 @@
+1.    List the product name and price of each invoice item.
+
+mysql>   SELECT pname,price from Product where pid in(select pid from Invoice_item) ;
++--------+-------+
+| pname  | price |
++--------+-------+
+| pen    |    51 |
+| pencil |    89 |
+| soap   | 122.4 |
++--------+-------+
+3 rows in set (0.00 sec)
+
+2.    List the product names, only include their purchased quantity more than 5.
+mysql>   SELECT pname from Product where pid in(select pid from Invoice_item where quantity>5) ;
++-------+
+| pname |
++-------+
+| pen   |
++-------+
+1 row in set (0.00 sec)
+
+3.    Find the product that has no sale.
+
+mysql>   SELECT pname,price from Product where pid not in(select pid from Invoice_item) ;
++-------+-------+
+| pname | price |
++-------+-------+
+| soap  | 122.4 |
++-------+-------+
+1 row in set (0.00 sec)
+
+4.    List the customer names who purchased the items ‘pen’ and ‘pencil’.
+mysql> select name from Customer where id in(select cust_id from Invoice_master where inv_id in(select Inv_id from Invoice_item where pid in(select pid from Product where pname='pen' or pname='pencil')));
++------+
+| name |
++------+
+| arun |
+| arun |
+| akil |
++------+
+3 rows in set (0.00 sec)
+
+5.    Display the purchased product details of the customer ’xyz’.
+mysql> select * from Product where pid in(select pid from Invoice_item where inv_id in(select inv_id from Invoice_master where cust_id in(select id from Customer  where name='akil')));
++-----+-------+-------+
+| pid | pname | price |
++-----+-------+-------+
+|   1 | pen   |    51 |
++-----+-------+-------+
+1 row in set (0.00 sec)
+6.    List the names of all customers who have purchased at least 2 products, make sure that no duplicate names in the result.
+mysql> select name from Customer where id in(select cust_id from Invoice_master where inv_id in(select inv_id from Invoice_item group by inv_id having count(inv_id)>=2));
++------+
+| name |
++------+
+| arun |
++------+
+1 row in set (0.00 sec)
