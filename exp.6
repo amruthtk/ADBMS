@@ -1,0 +1,26 @@
+1. Create a view for customers who have purchased products.
+
+mysql> create view v1 as select * from Customer where id in(select cust_id from Invoice_master where inv_id in (select inv_id from Invoice_item));
+
+mysql> select * from v1;
++------+------+---------+------------+------------+
+| id   | name | address | city       | ph_no      |
++------+------+---------+------------+------------+
+| 1001 | arun | palayam | trivandrum | 9999555343 |
+| 1002 | arun | calicut | mukkam     |       NULL |
+| 1003 | akil | palazhi | calicut    |  987654321 |
++------+------+---------+------------+------------+
+3 rows in set (0.00 sec)
+
+
+2. Create a view for no sale products.
+
+
+mysql> create view c2 as select * from Product where pid not in(select  pid from Invoice_item);
+mysql> select * from c2;
++-----+-------+-------+
+| pid | pname | price |
++-----+-------+-------+
+|   3 | soap  | 122.4 |
++-----+-------+-------+
+1 row in set (0.00 sec)
