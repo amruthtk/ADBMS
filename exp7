@@ -1,0 +1,90 @@
+OPTIMIZING DATABASE: (JOINS)
+
+1.List the product name and quantity of invoice items.
+
+mysql>SELECT Product.pname,Invoice_item.quantity FROM Product INNER JOIN Invoice_item ON Product.pid = Invoice_item.pid;
++--------+----------+
+| pname  | quantity |
++--------+----------+
+| pen    |        5 |
+| pen    |        9 |
+| pencil |        5 |
+| pencil |        5 |
++--------+----------+
+4 rows in set (0.00 sec)
+
+2.Display invoice details of the transaction dated ’31-01-2022’.
+
+mysql> SELECT Invoice_master.inv_date, Customer.name, Product.pname, Invoice_item.quantity   FROM Invoice_master   JOIN Customer ON Invoice_master.cust_id = Customer.id   JOIN Invoice_item ON Invoice_master.inv_id = Invoice_item.inv_id   JOIN
+Product ON Invoice_item.pid = Product.pid   WHERE Invoice_master.inv_date = '2023-02-25';
++------------+------+--------+----------+
+| inv_date   | name | pname  | quantity |
++------------+------+--------+----------+
+| 2023-02-25 | arun | pen    |        5 |
+| 2023-02-25 | arun | pencil |        5 |
++------------+------+--------+----------+
+2 rows in set (0.00 sec)
+
+3.Display the customer name, product name, invoice date of purchased item ‘pen’.
+mysql> SELECT Customer.name, Product.pname, Invoice_master.inv_date   FROM Invoice_master   JOIN Customer ON Invoice_master.cust_id = Customer.id   JOIN Invoice_item ON Invoice_master.inv_id = Invoice_item.inv_id   JOIN Product ON Invoice_item.pid = Product.pid   WHERE Product.pname = 'pen';
++------+-------+------------+
+| name | pname | inv_date   |
++------+-------+------------+
+| arun | pen   | 2023-02-25 |
+| akil | pen   | 2024-01-22 |
++------+-------+------------+
+2 rows in set (0.00 sec)
+
+4.Display all customer details and invoice details must include customer has not purchased items.
+mysql> select Customer.*,Invoice_master.* from Customer left join Invoice_master on Customer.id=Invoice_master.cust_id;
++------+------+---------+------------+------------+--------+---------+------------+
+| id   | name | address | city       | ph_no      | inv_id | cust_id | inv_date   |
++------+------+---------+------------+------------+--------+---------+------------+
+| 1001 | arun | palayam | trivandrum | 9999555343 |    101 |    1001 | 2023-02-25 |
+| 1002 | arun | calicut | mukkam     |       NULL |    102 |    1002 | 2024-03-15 |
+| 1003 | akil | palazhi | calicut    |  987654321 |    103 |    1003 | 2024-01-22 |
+| 1004 | ajay | mukkam  | calicut    |     987621 |   NULL |    NULL | NULL       |
++------+------+---------+------------+------------+--------+---------+------------+
+4 rows in set (0.00 sec)
+
+OPTIMIZING DATABASE: (Using Set, arithmetic, logical and special operators)
+
+1.        Display customer_id, city  who lives either in ‘mukkam’ or in ‘trivandrum’
+mysql> select id,city from Customer where city in('mukkam','trivandrum');
++------+------------+
+| id   | city       |
++------+------------+
+| 1001 | trivandrum |
+| 1002 | mukkam     |
++------+------------+
+2 rows in set (0.00 sec)
+
+2.Display product details with an updated price amount(new price= old price+5rs)
+mysql> SELECT *, (price + 5) AS new_price FROM Product;
++-----+--------+-------+-----------+
+| pid | pname  | price | new_price |
++-----+--------+-------+-----------+
+|   1 | pen    |    51 |        56 |
+|   2 | pencil |    89 |        94 |
+|   3 | soap   | 122.4 |     127.4 |
++-----+--------+-------+-----------+
+3 rows in set (0.00 sec)
+
+3.Display customer details who doesn’t have phone number and lives in ‘mkm’ city (use logical operators)
+mysql> SELECT*FROM Customer  WHERE ph_no IS NULL AND city='mukkam';
++------+------+---------+--------+-------+
+| id   | name | address | city   | ph_no |
++------+------+---------+--------+-------+
+| 1002 | arun | calicut | mukkam |  NULL |
++------+------+---------+--------+-------+
+1 row in set (0.00 sec)
+
+4.List the product names if it finds any records in the invoice items table has quantity =3 (use special operators)
+mysql> SELECT pname  FROM Product  WHERE pid in (     SELECT pid      FROM Invoice_item   where quantity =5 );
++--------+
+| pname  |
++--------+
+| pen    |
+| pencil |
++--------+
+2 rows in set (0.00 sec)
