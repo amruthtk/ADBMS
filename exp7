@@ -88,3 +88,4 @@ mysql> SELECT pname  FROM Product  WHERE pid in (     SELECT pid      FROM Invoi
 | pencil |
 +--------+
 2 rows in set (0.00 sec)
+//VERIFIED
