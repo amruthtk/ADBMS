@@ -1,0 +1,147 @@
+1. Create a database named CompanyDB
+2. Create two tables:
+    Employees (EmpID, Name, Department, Salary )
+    Departments (DeptID, DeptName, Location)
+
+3. Insert at least  5 records into the  table employees and  3 records into the department table.
+
+
+1.ans)create database CompanyDB;
+Query OK, 1 row affected (0.17 sec)
+
+use CompanyDB;
+Database changed
+
+2.ans)create table Employees(EmpID int,name varchar(20),Department varchar(20),Salary int);
+Query OK, 0 rows affected (0.61 sec)
+
+ create table Departments(DeptID int,DeptName varchar(20),Location varchar(20));
+Query OK, 0 rows affected (1.01 sec)
+
+3.ans)insert into Employees values(1,'aneesa','mca',2000),(2,'athulya','mca',3000),(3,'ajay','mba',4500),(4,'amruth','mba',7000),(5,'anjana','maths',1500);
+Query OK, 5 rows affected (0.11 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Employees;
++-------+---------+------------+--------+
+| EmpID | name    | Department | Salary |
++-------+---------+------------+--------+
+|     1 | aneesa  | mca        |   2000 |
+|     2 | athulya | mca        |   3000 |
+|     3 | ajay    | mba        |   4500 |
+|     4 | amruth  | mba        |   7000 |
+|     5 | anjana  | maths      |   1500 |
++-------+---------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> insert into Departments values(100,'mca','kmct'),(101,'mba','mes'),(102,'maths','awh');
+Query OK, 3 rows affected (0.15 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from Departments;
++--------+----------+----------+
+| DeptID | DeptName | Location |
++--------+----------+----------+
+|    100 | mca      | kmct     |
+|    101 | mba      | mes      |
+|    102 | maths    | awh      |
++--------+----------+----------+
+3 rows in set (0.00 sec)
+
+select * from Employees where name like 'a%';
++-------+---------+------------+--------+
+| EmpID | name    | Department | Salary |
++-------+---------+------------+--------+
+|     1 | aneesa  | mca        |   2000 |
+|     2 | athulya | mca        |   3000 |
+|     3 | ajay    | mba        |   4500 |
+|     4 | amruth  | mba        |   7000 |
+|     5 | anjana  | maths      |   1500 |
++-------+---------+------------+--------+
+5 rows in set (0.00 sec)
+
+select Department,count(*) from Employees group by Department;
+
++------------+----------+
+| Department | count(*) |
++------------+----------+
+| mca        |        2 |
+| mba        |        2 |
+| maths      |        1 |
++------------+----------+
+3 rows in set (0.02 sec)
+
+select * from Employees order by Salary desc;
++-------+---------+------------+--------+
+| EmpID | name    | Department | Salary |
++-------+---------+------------+--------+
+|     4 | amruth  | mba        |   7000 |
+|     3 | ajay    | mba        |   4500 |
+|     2 | athulya | mca        |   3000 |
+|     1 | aneesa  | mca        |   2000 |
+|     5 | anjana  | maths      |   1500 |
++-------+---------+------------+--------+
+5 rows in set (0.00 sec)
+
+
+
+mysql> select Employees.name,Departments.DeptName,Departments.Location from Employees JOIN Departments on Employees.Department=Departments.DeptName;
++---------+----------+----------+
+| name    | DeptName | Location |
++---------+----------+----------+
+| aneesa  | mca      | kmct     |
+| athulya | mca      | kmct     |
+| ajay    | mba      | mes      |
+| amruth  | mba      | mes      |
+| anjana  | maths    | awh      |
++---------+----------+----------+
+5 rows in set (0.00 sec)
+
+select name from Employees where Salary> (select avg(Salary)from Employees);
++--------+
+| name   |
++--------+
+| ajay   |
+| amruth |
++--------+
+2 rows in set (0.00 sec)
+
+ create view v1 as select * from Employees where Salary>4000;
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> select * from v1;
++-------+--------+------------+--------+
+| EmpID | name   | Department | Salary |
++-------+--------+------------+--------+
+|     3 | ajay   | mba        |   4500 |
+|     4 | amruth | mba        |   7000 |
++-------+--------+------------+--------+
+2 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
