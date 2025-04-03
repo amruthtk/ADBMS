@@ -1,0 +1,86 @@
+1)
+mysql> delimiter //  
+mysql> show databases//
+mysql> use invoice
+mysql> show tables //
++-------------------+
+| Tables_in_invoice |
++-------------------+
+| Customer          |
+| Invoice_item      |
+| Invoice_master    |
+| Product           |
+| c2                |
+| v1                |
++-------------------+
+6 rows in set (0.00 sec
+
+mysql> create procedure all__data()
+    -> begin
+    -> select * from Customer;
+    -> select * from Invoice_item;
+    -> select * from Invoice_master;
+    -> select * from Product;
+    -> end//
+
+mysql> call all__data//
++------+------+---------+------------+------------+
+| id   | name | address | city       | ph_no      |
++------+------+---------+------------+------------+
+| 1001 | arun | palayam | trivandrum | 9999555343 |
+| 1002 | arun | calicut | mukkam     |       NULL |
+| 1003 | akil | palazhi | calicut    |  987654321 |
+| 1004 | ajay | mukkam  | calicut    |     987621 |
++------+------+---------+------------+------------+
+4 rows in set (0.00 sec)
+
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|    101 |    1 |        5 |
+|    101 |    2 |        5 |
+|    102 |    2 |        5 |
+|    103 |    1 |        9 |
++--------+------+----------+
+4 rows in set (0.00 sec)
+
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    101 |    1001 | 2023-02-25 |
+|    102 |    1002 | 2024-03-15 |
+|    103 |    1003 | 2024-01-22 |
++--------+---------+------------+
+3 rows in set (0.00 sec)
+
++-----+--------+-------+
+| pid | pname  | price |
++-----+--------+-------+
+|   1 | pen    |    51 |
+|   2 | pencil |    89 |
+|   3 | soap   | 122.4 |
++-----+--------+-------+
+3 rows in set (0.00 sec)
+
+2) 
+mysql> create procedure greatest (a int, b int)
+    -> begin 
+    -> 
+    -> declare x,y int;
+    -> set x=a;
+    -> set y=b;
+    -> if x>y then
+    -> select x as 'greater';
+    -> else
+    -> select y as 'greater';
+    -> end if;
+    -> end //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call greatest(35,75)//
++---------+
+| greater |
++---------+
+|      75 |
++---------+
+
