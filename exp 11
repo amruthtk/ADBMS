@@ -1,0 +1,57 @@
+11)
+mysql> CREATE PROCEDURE list_name()
+    -> BEGIN
+    ->     DECLARE done INT DEFAULT FALSE;
+    ->     DECLARE cname VARCHAR(20);
+    ->     DECLARE ccursor CURSOR FOR SELECT name FROM Customer;
+    ->     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    -> 
+    ->     OPEN ccursor;
+    -> 
+    ->     read_loop: LOOP
+    ->         FETCH ccursor INTO cname;
+    ->         IF done THEN
+    ->             LEAVE read_loop;
+    ->         END IF;
+    -> 
+    ->         SELECT cname AS 'Customer name';
+    ->     END LOOP read_loop;
+    -> 
+    ->     CLOSE ccursor;
+    -> END //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> call list_name()
+    -> call list_name()^C
+mysql> call list_name();
++---------------+
+| Customer name |
++---------------+
+| amruth        |
++---------------+
+1 row in set (0.00 sec)
+
++---------------+
+| Customer name |
++---------------+
+| arun          |
++---------------+
+1 row in set (0.00 sec)
+
++---------------+
+| Customer name |
++---------------+
+| akil          |
++---------------+
+1 row in set (0.00 sec)
+
++---------------+
+| Customer name |
++---------------+
+| ajay          |
++---------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
