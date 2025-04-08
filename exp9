@@ -23,3 +23,4 @@ mysql> select pname,price,minmax(price) as PRICE_RANGE from Product$$
 | soap   | 122.4 | high        |
 +--------+-------+-------------+
 3 rows in set (0.00 sec)
+//VERIFIED
