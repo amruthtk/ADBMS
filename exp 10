@@ -1,0 +1,60 @@
+1.      Create a trigger to handle updates to the customer table.
+mysql> DELIMITER $$
+mysql> 
+mysql> CREATE TRIGGER UPCUSTOMER 
+    -> AFTER UPDATE ON Customer
+    -> FOR EACH ROW 
+    -> BEGIN
+    ->     INSERT INTO Customer1 (id, name, address, city, ph_no)
+    ->     VALUES (OLD.id, OLD.name, OLD.address, OLD.city, OLD.ph_no);
+    -> END $$
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> update Customer set name='amruth' where id=1001;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Customer1;
++------+------+---------+------------+------------+
+| id   | name | address | city       | ph_no      |
++------+------+---------+------------+------------+
+| 1001 | arun | palayam | trivandrum | 9999555343 |
++------+------+---------+------------+------------+
+1 row in set (0.00 sec)
+
+2.      Create a trigger to handle inserts to the product relation ( if price < 5 the set price to 10).
+
+mysql> create trigger pcheck
+    -> before insert on Product
+    -> for each row
+    -> begin
+    -> if new.price<5 then
+    -> set new.price=10;
+    -> end if;
+    -> end;
+    -> //
+Query OK, 0 rows affected (0.01 sec)
+
++-----+--------+-------+
+| pid | pname  | price |
++-----+--------+-------+
+|   1 | pen    |    51 |
+|   2 | pencil |    89 |
+|   3 | soap   | 122.4 |
++-----+--------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into Product values(6,'marker',4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from Product;
++-----+--------+-------+
+| pid | pname  | price |
++-----+--------+-------+
+|   1 | pen    |    51 |
+|   2 | pencil |    89 |
+|   3 | soap   | 122.4 |
+|   6 | marker |    10 |
++-----+--------+-------+
+4 rows in set (0.00 sec)
+
