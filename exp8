@@ -1,4 +1,4 @@
-1)
+1)Create a procedure to display all tables in the invoice database.
 mysql> delimiter //  
 mysql> show databases//
 mysql> use invoice
@@ -62,7 +62,7 @@ mysql> call all__data//
 +-----+--------+-------+
 3 rows in set (0.00 sec)
 
-2) 
+2) Create a procedure to find greatest of 2 numbers.
 mysql> create procedure greatest (a int, b int)
     -> begin 
     -> 
@@ -83,4 +83,30 @@ mysql> call greatest(35,75)//
 +---------+
 |      75 |
 +---------+
+3)Create a procedure to display invoice details of a particular customer.
+mysql> CREATE PROCEDURE inv_deatails(IN N VARCHAR(20))
+    -> BEGIN
+    ->     SELECT 
+    ->         Customer.name, 
+    ->         Invoice_master.inv_id, 
+    ->         Invoice_master.inv_date, 
+    ->         Product.pname, 
+    ->         Invoice_item.pid, 
+    ->         Invoice_item.quantity
+    ->     FROM Invoice_item
+    ->     JOIN Invoice_master ON Invoice_master.inv_id = Invoice_item.inv_id
+    ->     JOIN Product ON Product.pid = Invoice_item.pid
+    ->     JOIN Customer ON Customer.id = Invoice_master.cust_id
+    ->     WHERE Customer.name = N;
+    -> END $$
+Query OK, 0 rows affected (0.00 sec)
 
+mysql> CALL inv_deatails('akil');
++------+--------+------------+-------+------+----------+
+| name | inv_id | inv_date   | pname | pid  | quantity |
++------+--------+------------+-------+------+----------+
+| akil |    103 | 2024-01-22 | pen   |    1 |        9 |
++------+--------+------------+-------+------+----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
