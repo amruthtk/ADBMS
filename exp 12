@@ -1,0 +1,61 @@
+1.      Write a MongoDB query to create an INVOICE database and collections (CUSTOMER, PRODUCT) and its corresponding documents.
+test> use INVOICE
+switched to db INVOICE
+
+INVOICE> db.CUSTOMER.insert({cust_id:"1001",name:"AMRUTH",phone:"9562859559",city: "POTTAMAL"})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('680a018fb7f68f45edef6352') }
+}
+
+INVOICE> db.PRODUCT.insertOne({p_id:"01",pname:"PEN",price:"100"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('680a01acb7f68f45edef6355')
+}
+
+
+1.      Write a MongoDB query to create an INVOICE database and collections (CUSTOMER, PRODUCT) and its corresponding documents.
+
+test> use INVOICE
+switched to db INVOICE
+
+INVOICE> db.CUSTOMER.insert({cust_id:"1001",name:"AJAY",phone:"7034534928",city: "KATTANGAL"})  
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('67fe2252aa3a5641a8d861e0') }
+}
+INVOICE> db.C
+
+INVOICE> db.PRODUCT.insertOne({p_id:"01",pname:"PEN",price:"100"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('67fe235daa3a5641a8d861e2')
+
+
+2.      Write a MongoDB query to find all documents from the collection CUSTOMER
+
+INVOICE> db.CUSTOMER.find()
+[
+  {
+    _id: ObjectId('680a018fb7f68f45edef6352'),
+    cust_id: '1001',
+    name: 'AMRUTH',
+    phone: '9562859559',
+    city: 'POTTAMAL'
+  }
+
+3.      Write a MongoDB query to update the city in the collection CUSTOMER.
+
+INVOICE> db.CUSTOMER.update({ cust_id: "1001" }, { $set: { city: "Calicut" } })
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+4.      Write a MongoDB query to delete the first matched document whose city is “Calicut”.
+INVOICE> db.CUSTOMER.deleteOne({city:"Calicut"})
+{ acknowledged: true, deletedCount: 1 }
