@@ -1,4 +1,4 @@
-1.      Write a MongoDB query to display the customer documents having city ‘ekm’,’tvm’.
+1.      Write a MongoDB query to display the customer documents having city ‘KATTANGAL’,’KOTOOLI’.
 
 INVOICE> db.CUSTOMER.find({city:{$in:["KATTANGAL","KOTOOLI"]}})
 INVOICE> db.CUSTOMER.find({city:{$in:["KATTANGAL","KOTOOLI"]}})
@@ -48,3 +48,4 @@ INVOICE> db.CUSTOMER.find({city:{$nin:["KATTANGAL"]}})
     city: 'KOTOOLI'
   }
 ]
+//VERIFIED
