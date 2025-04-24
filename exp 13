@@ -1,0 +1,50 @@
+1.      Write a MongoDB query to display the customer documents having city ‘ekm’,’tvm’.
+
+INVOICE> db.CUSTOMER.find({city:{$in:["KATTANGAL","KOTOOLI"]}})
+INVOICE> db.CUSTOMER.find({city:{$in:["KATTANGAL","KOTOOLI"]}})
+[
+  {
+    _id: ObjectId('680a01a4b7f68f45edef6353'),
+    cust_id: '1002',
+    name: 'AJAY',
+    phone: '7034534928',
+    city: 'KATTANGAL'
+  },
+  {
+    _id: ObjectId('680a01a8b7f68f45edef6354'),
+    cust_id: '1003',
+    name: 'ANJANA',
+    phone: '7012577731',
+    city: 'KOTOOLI'
+  }
+]
+
+2.     Write a MongoDB query to display all product documents their price >70.
+INVOICE> db.PRODUCT.find({price: {$gt: "70"}})
+[
+  {
+    _id: ObjectId('680a01b3b7f68f45edef6356'),
+    p_id: '02',
+    pname: 'PENCIL',
+    price: '75'
+  },
+  {
+    _id: ObjectId('680a01c3b7f68f45edef6358'),
+    p_id: '04',
+    pname: 'SCALE',
+    price: '90'
+  }
+]
+
+3.     Write a MongoDB query to find customer documents who not live in ‘KATTANGAL’.
+INVOICE> db.CUSTOMER.find({city:{$nin:["KATTANGAL"]}})
+INVOICE> db.CUSTOMER.find({city:{$nin:["KATTANGAL"]}})
+[
+  {
+    _id: ObjectId('680a01a8b7f68f45edef6354'),
+    cust_id: '1003',
+    name: 'ANJANA',
+    phone: '7012577731',
+    city: 'KOTOOLI'
+  }
+]
