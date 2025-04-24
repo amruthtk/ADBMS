@@ -1,0 +1,79 @@
+1.      Write a MongoDB query to sort customer details in ascending order of their name.
+
+INVOICE> db.CUSTOMER.find().sort({ name: 1 })
+[
+  {
+    _id: ObjectId('680a01a4b7f68f45edef6353'),
+    cust_id: '1002',
+    name: 'AJAY',
+    phone: '7034534928',
+    city: 'KATTANGAL'
+  },
+  {
+    _id: ObjectId('680a05d4b7f68f45edef6359'),
+    cust_id: '1001',
+    name: 'AMRUTH',
+    phone: '9562859559',
+    city: 'KATTANGAL'
+  },
+  {
+    _id: ObjectId('680a01a8b7f68f45edef6354'),
+    cust_id: '1003',
+    name: 'ANJANA',
+    phone: '7012577731',
+    city: 'KOTOOLI'
+  }
+]
+
+2.      Write a MongoDB query to count number of customers in each city.
+INVOICE> db.CUSTOMER.aggregate([{ $group: { _id: "$city", TOTAL: { $sum: 1 } } }]);
+[ { _id: 'KATTANGAL', TOTAL: 2 }, { _id: 'KOTOOLI', TOTAL: 1 } ]
+
+3.      Write a MongoDB query to find minimum and maximum age in each city.
+INVOICE> db.CUSTOMER.aggregate([{ $group: { _id: "$city", min: { $min: "$age" }, max: { $max: "$age" } } }]);
+[
+  { _id: 'KATTANGAL', min: 20, max: 50 },
+  { _id: 'KOTOOLI', min: 35, max: 35 }
+
+4.Write a MongoDB query using the $match stage to retrieve all customer documents whose customer_name starts with the letter “S”.
+INVOICE> db.CUSTOMER.aggregate([
+...   { $match: { name: { $regex: "^S", $options: "i" } } }
+... ]);
+[
+  {
+    _id: ObjectId('680a05d4b7f68f45edef6359'),
+    cust_id: '1001',
+    name: 'SOJA',
+    phone: '9562859559',
+    city: 'KATTANGAL',
+    age: 50
+  }
+]
+
+5.Write a query using $lookup to join CUSTOMER and PRODUCT collections and display only customer name, product name, and price.
+
+INVOICE> db.CUSTOMER.aggregate([
+...   { 
+...     $lookup: {
+...       from: "PRODUCT",
+...       localField: "p_id",       // The field in CUSTOMER that refers to the product's p_id
+...       foreignField: "p_id",     // The field in PRODUCT to match the p_id
+...       as: "product_info"        // New array field containing matched product info
+...     }
+...   },
+...   { $unwind: "$product_info" },  // Flatten the product_info array so we get one document per product
+...   { 
+...     $project: {
+...       _id: 0,                     // Exclude the _id field
+...       name: 1,                   // Include the customer name
+...       "product_info.pname": 1,    // Include the product name
+...       "product_info.price": 1     // Include the product price
+...     }
+...   }
+... ]);
+[
+  { name: 'AJAY', product_info: { pname: 'PEN', price: '100' } },
+  { name: 'ANJANA', product_info: { pname: 'PENCIL', price: '75' } },
+  { name: 'SOJA', product_info: { pname: 'ERASER', price: '50' } }
+]
+
