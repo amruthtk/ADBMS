@@ -77,3 +77,4 @@ INVOICE> db.CUSTOMER.aggregate([
   { name: 'SOJA', product_info: { pname: 'ERASER', price: '50' } }
 ]
 
+//VERIFIED
