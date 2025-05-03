@@ -1,0 +1,221 @@
+test> use collegeDB
+switched to db collegeDB
+
+collegeDB> db.students.insertMany ([{_id:"1",name:"Ajay",department:"Btech",marks: { maths:85,science:90,english:78},admissionyear:"2020"},{_id:"2",name:"Akhil",department:"MCA",marks: { maths:80,science:75,english:68},admissionyear:"2022"},{_id:"3",name:"Anjana",department:"MBA",marks: { maths:70,science:85,english:88},adimissionyear:2021}])
+{ acknowledged: true, insertedIds: { '0': '1', '1': '2', '2': '3' } }
+
+1. Display all documents in the students collection.
+collegeDB> collegeDB> db.students.find()
+[
+  {
+    _id: '1',
+    name: 'Ajay',
+    department: 'Btech',
+    marks: { maths: 85, science: 90, english: 78 },
+    admissionyear: '2020'
+  },
+  {
+    _id: '2',
+    name: 'Akhil',
+    department: 'MCA',
+    marks: { maths: 80, science: 75, english: 68 },
+    admissionyear: '2022'
+  },
+  {
+    _id: '3',
+    name: 'Anjana',
+    department: 'MBA',
+    marks: { maths: 70, science: 85, english: 88 },
+    adimissionyear: 2021
+  }
+]
+
+2. Display students whose department is "MBA".
+collegeDB> db.students.find({department:"MBA"})
+[
+  {
+    _id: '3',
+    name: 'Anjana',
+    department: 'MBA',
+    marks: { maths: 70, science: 85, english: 88 },
+    adimissionyear: 2021
+  }
+]
+
+3. Update the admissionyear of a student "Anjana" to 2019.
+collegeDB> db.students.update ({name:"Anjana"},{$set:{admissionyear:"2019"}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+4. Add a new field attendance: 95 to the student named "Alice".
+collegeDB> db.students.updateOne ({name:"Anjana"},{$set:{attendance:95}} )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+  {
+    _id: '3',
+    name: 'Anjana',
+    department: 'MBA',
+    marks: { maths: 70, science: 85, english: 88 },
+    adimissionyear: 2021,
+    admissionyear: '2019',
+    attendance: 95
+  }
+
+5. Delete a student document where the name is "Ajay".
+db.students.deleteOne ({id:"1"})
+
+part C
+
+1. Retrieve names of students who scored more than 79 in math.
+collegeDB> db.students.find ({ "marks.maths":{$gt:79}})
+[
+  {
+    _id: '2',
+    name: 'Akhil',
+    department: 'MCA',
+    marks: { maths: 80, science: 75, english: 68 },
+    admissionyear: '2022'
+  }
+]
+
+2. List students admitted in the year 2019.
+collegeDB> db.students.find({ admissionyear: 2019 })
+[
+  {
+    _id: '3',
+    name: 'Anjana',
+    department: 'MBA',
+    marks: { maths: 70, science: 85, english: 88 },
+    adimissionyear: 2021,
+    admissionyear: 2019,
+    attendance: 95
+  }
+]
+
+3. Display students sorted by name in ascending order.
+collegeDB> db.students.find().sort({ name : 1 })
+[
+  {
+    _id: '2',
+    name: 'Akhil',
+    department: 'MCA',
+    marks: { maths: 80, science: 75, english: 68 },
+    admissionyear: 2022
+  },
+  {
+    _id: '3',
+    name: 'Anjana',
+    department: 'MBA',
+    marks: { maths: 70, science: 85, english: 88 },
+    adimissionyear: 2021,
+    admissionyear: 2019,
+    attendance: 95
+  }
+]
+
+4. Count the number of students in each department.
+collegeDB> db.students.aggregate([ { $group: { _id:"$department",count:{$sum:1} } } ])
+[ { _id: 'MCA', count: 1 }, { _id: 'MBA', count: 1 } ]
+
+Part D: Aggregation
+
+1. Use $project to display only name and total marks (sum of all subjects).
+collegeDB> db.students.aggregate([
+...   {
+...     $project: {
+...       _id: 0,
+...       name: 1,
+...       totalMarks: {
+...         $add: ["$marks.maths", "$marks.science", "$marks.english"] 
+...       }
+...     }
+...   }
+... ])
+[
+  { name: 'Akhil', totalMarks: 223 },
+  { name: 'Anjana', totalMarks: 243 }
+]
+
+2. Use $match and $group to calculate the average math marks department-wise.
+collegeDB> db.students.aggregate([
+...   {
+...     $match: {
+...       "marks.maths": { $exists: true }
+...     }
+...   },
+...   {
+...     $group: {
+...       _id: "$department",
+...       avgMathMarks: { $avg: "$marks.maths" }
+...     }
+...   }
+... ])
+[ { _id: 'MCA', avgMathMarks: 80 }, { _id: 'MBA', avgMathMarks: 70 } ]
+
+3.Use $sort to display students based on their science marks in descending order.
+collegeDB> db.students.aggregate([
+...   {
+...     $sort: {
+...       "marks.science": -1
+...     }
+...   }
+... ])
+[
+  {
+    _id: '3',
+    name: 'Anjana',
+    department: 'MBA',
+    marks: { maths: 70, science: 85, english: 88 },
+    adimissionyear: 2021,
+    admissionyear: 2019,
+    attendance: 95
+  },
+  {
+    _id: '2',
+    name: 'Akhil',
+    department: 'MCA',
+    marks: { maths: 80, science: 75, english: 68 },
+    admissionyear: 2022
+  }
+]
+
+4. Use $lookup to join students with a new collection named internships, and display:
+students> db.internships.aggregate([
+...   {
+...     $lookup: {
+...       from: "students",
+...       localField: "student_id",
+...       foreignField: "_id",
+...       as: "student_details"
+...     }
+...   }
+... ])
+[
+  {
+    _id: ObjectId('6815c51851957935cbef634b'),
+    id: '2',
+    company: 'Microsoft',
+    duration: '3 M',
+    student_details: []
+  },
+  {
+    _id: ObjectId('6815c51851957935cbef634c'),
+    id: '3',
+    company: 'IBM',
+    duration: '6 M',
+    student_details: []
+  }
+]
+
+
